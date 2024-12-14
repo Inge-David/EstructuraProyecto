@@ -1,5 +1,6 @@
 import mysql.connector
 import json
+import ast
 
 # Conexión a la base de datos MySQL
 db = mysql.connector.connect(user='root', password='123456', host='localhost', database='juego', auth_plugin='mysql_native_password')
@@ -22,6 +23,15 @@ class Jugador:
 def load_from_db(jugador_id):
         cursor.execute('SELECT * FROM jugadores WHERE id = %s', (jugador_id,))
         return cursor.fetchone()
+
+# Busca el inventario de un jugador
+def load_inventory(jugador_id):
+        cursor.execute('SELECT * FROM jugadores WHERE id = %s', (jugador_id,))
+        result = cursor.fetchone()
+        inventario = ast.literal_eval(result[5])
+        print("--- Inventario de ", result[1]," ---")
+        for item in inventario:
+              print(item)
 
 # Guardar jugador en la BD
 def save_to_db(jugador):
