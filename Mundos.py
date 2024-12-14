@@ -2,7 +2,7 @@ import mysql.connector
 import heapq
 import json
 
-# Conexión a la base de datos MySQL
+
 db = mysql.connector.connect(user='root', password='123456', host='localhost', database='juego', auth_plugin='mysql_native_password')
 cursor = db.cursor()
 
@@ -32,18 +32,18 @@ class Graph:
             cursor.execute('UPDATE mundos SET grafo_serializado = %s WHERE id = %s', (grafo_serializado, self.graph_id))
             db.commit()
 
-    # Crear 
+ 
     def add_edge(self, node, neighbor, distance):
         if node not in self.graph:
             self.graph[node] = []
         self.graph[node].append((neighbor, distance))
         self.save_to_db()  
 
-    # Leer 
+
     def get_connections(self, node):
         return self.graph.get(node, [])
 
-    # Actualizar 
+   
     def update_edge(self, node, old_neighbor, new_neighbor, new_distance):
         if node in self.graph:
             for i, (neighbor, distance) in enumerate(self.graph[node]):
@@ -51,7 +51,7 @@ class Graph:
                     self.graph[node][i] = (new_neighbor, new_distance)
             self.save_to_db() 
 
-    # Eliminar 
+
     def delete_node(self, node):
         if node in self.graph:
             del self.graph[node]
@@ -61,19 +61,19 @@ class Graph:
                     connections.remove((neighbor, _))
         self.save_to_db()  
 
-    # Mostrar el grafo completo
+ 
     def display_graph(self):
         return self.graph
 
-    # Implementación de Dijkstra para encontrar el camino más corto desde un nodo de inicio
+
     def dijkstra(self, start, end):
         distances = {node: float('inf') for node in self.graph}
         distances[start] = 0
 
-        # Nodo anterior para reconstruir el camino
+
         previous_nodes = {node: None for node in self.graph}
 
-        # Cola de prioridad (min-heap),
+ 
         queue = [(0, start)] 
 
         while queue:
@@ -102,7 +102,7 @@ class Graph:
 
         return path, distances[end]
 
-# Uso
+
 g = Graph()
 
 
@@ -118,24 +118,24 @@ if not g.graph:
     for node, neighbor, distance in edges:
         g.add_edge(node, neighbor, distance)
 
-# Mostrar el grafo completo
+
 print("Grafo completo:", g.display_graph())
 
-# Mostrar las conexiones de un nodo
+
 print("Conexiones de 0:", g.get_connections(0))
 print("Conexiones de 2:", g.get_connections(2))
 
-# Actualizar una conexión
+
 print("Actualizando la distancia entre 0 y 2 a 15")
 g.update_edge(0, 2, 2, 15)
 print("Después de actualizar una conexión:", g.display_graph())
 
-# Eliminar un nodo
+
 print("Eliminando el nodo 5")
 g.delete_node(5)
 print("Después de eliminar nodo 5:", g.display_graph())
 
-# Ejecutar Dijkstra
+
 start_node = 0
 end_node = 3
 path, distance = g.dijkstra(start_node, end_node)
