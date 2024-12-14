@@ -35,17 +35,9 @@ def update_to_db(rank):
 
 # Muestra el ranking ordenado de mayor puntaje a menor puntaje
 def load_ranking():
-        cursor.execute('SELECT id_jugador, puntuacion FROM ranking ORDER BY puntuacion DESC')
+        cursor.execute('SELECT id_jugador, puntuacion FROM ranking ORDER BY puntuacion DESC LIMIT 10')
         result = cursor.fetchall()
         print("Ranking de Jugadores")
         for fila in result:
             jugador = Jugador.load_from_db(fila[0])
             print("Jugador: ", jugador[1], " Puntaje: ", fila[1])
-
-# rank = Ranking(1, 99, 1)
-# rank2 = Ranking(2, 500, 1)
-
-# save_to_db(rank)
-# save_to_db(rank2)
-
-ranking = load_ranking()
